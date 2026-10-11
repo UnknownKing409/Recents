@@ -1,97 +1,114 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.google.devtools.ksp)
+alias(libs.plugins.androidApplication)
+alias(libs.plugins.compose.compiler)
+alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
-    namespace = "com.tymwitko.recents"
-    //noinspection GradleDependency - 37 broken
-    compileSdk = 36
+namespace = "com.tymwitko.recents"
+//noinspection GradleDependency - 37 broken
+compileSdk = 36
 
-    defaultConfig {
-        applicationId = "com.tymwitko.recents"
-        minSdk = 25
-        //noinspection OldTargetApi - 37 broken
-        targetSdk = 36
-        versionCode = 35
-        versionName = "1.8.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            optimization {
-                enable = true
-            }
-            isDebuggable = false
-            isCrunchPngs = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-        debug {
-            isDebuggable = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-    dependenciesInfo {
-        includeInApk = false
-        includeInBundle = false
-    }
-    packaging {
-        jniLibs.keepDebugSymbols.add("**/*.so")
+signingConfigs {
+    create("release") {
+        storeFile = file("release.jks")
+        storePassword = "android"
+        keyAlias = "android"
+        keyPassword = "android"
     }
 }
 
+defaultConfig {
+    applicationId = "com.tymwitko.recents"
+    minSdk = 25
+    //noinspection OldTargetApi - 37 broken
+    targetSdk = 36
+    versionCode = 35
+    versionName = "1.8.0"
+
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+}
+
+buildTypes {
+    release {
+        signingConfig = signingConfigs.getByName("release")
+        optimization {
+            enable = true
+        }
+        isDebuggable = false
+        isCrunchPngs = false
+        isMinifyEnabled = true
+        isShrinkResources = true
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+    }
+
+    debug {
+        isDebuggable = true
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+        signingConfig = signingConfigs.getByName("debug")
+    }
+}
+
+compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+buildFeatures {
+    compose = true
+    buildConfig = true
+}
+
+dependenciesInfo {
+    includeInApk = false
+    includeInBundle = false
+}
+
+packaging {
+    jniLibs.keepDebugSymbols.add("**/*.so")
+}
+
+}
+
 dependencies {
+implementation(libs.androidx.core.ktx)
+implementation(libs.androidx.appcompat)
+implementation(libs.material)
+implementation(libs.androidx.activity)
+implementation(libs.androidx.runtime.android)
+implementation(libs.androidx.material3.android)
+implementation(libs.androidx.activity.compose)
+implementation(platform(libs.androidx.compose.bom))
+implementation(libs.androidx.ui)
+implementation(libs.androidx.ui.graphics)
+implementation(libs.androidx.ui.tooling.preview)
+implementation(libs.androidx.material3)
+implementation(libs.androidx.navigation.runtime.android)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.runtime.android)
-    implementation(libs.androidx.material3.android)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.runtime.android)
-    testImplementation(libs.junit)
-    testImplementation(libs.io.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.androidx.arch.core.testing)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    // Koin
-    implementation(libs.koin.core)
-    // Koin main features for Android
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
-    // Room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    // Shizuku
-    implementation(libs.dev.rikka.shizuku.provider)
-    implementation(libs.dev.rikka.shizuku.api)
+testImplementation(libs.junit)
+testImplementation(libs.io.mockk)
+testImplementation(libs.kotlinx.coroutines.test)
+testImplementation(libs.androidx.arch.core.testing)
 
-    implementation(libs.lsposed.hiddenbypass)
+androidTestImplementation(libs.androidx.junit)
+androidTestImplementation(libs.androidx.espresso.core)
+
+implementation(libs.koin.core)
+implementation(libs.koin.android)
+implementation(libs.koin.compose)
+
+implementation(libs.androidx.room.runtime)
+ksp(libs.androidx.room.compiler)
+
+implementation(libs.dev.rikka.shizuku.provider)
+implementation(libs.dev.rikka.shizuku.api)
+
+implementation(libs.lsposed.hiddenbypass)
+
 }
